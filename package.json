@@ -1,0 +1,21 @@
+{
+  "name": "safe_api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Donacien",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.3",
+    "unirest": "^0.6.0"
+  },
+  "devDependencies": {},
+  "description": "Stay Safe"
+}

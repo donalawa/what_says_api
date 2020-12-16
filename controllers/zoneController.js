@@ -73,6 +73,7 @@ exports.addDangerZoneCount = async (req, res) => {
         });
 
     } catch (err) {
+        console.log(err)
         res.status(500).send({ success: false, message: "There was an error" })
     }
 }

@@ -3,6 +3,7 @@ const Answers = require('../models/Answers');
 exports.getAnswersForQuestion = async (req,res) => {
     try {
         let questionId = req.headers.quesId;
+        console.log(req.headers)
         if(!questionId) {
             return res.send({success: false, message: "Please make sure you pass the question id in header"})
         }

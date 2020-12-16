@@ -5,7 +5,7 @@ exports.getAllQuestions = async (req,res) => {
         let questions = await Question.find({});
         return res.status(200).send({success: true,message: "All Questions", data: questions})
     } catch (error) {
-        return res.status(500).send({success: false, message: "There was an error with the request"})
+        return res.status(501).send({success: false, message: "There was an error with the request"})
     }
 
 }
@@ -15,7 +15,7 @@ exports.getAllNwQuestions = async (req,res) => {
         let questions = await Question.find({region: "North West"});
         return res.status(200).send({success: true, message: "All North West Questions", data: questions})
     } catch (error) {
-        return res.status(500).send({success: false, message: "There was an error with the request"})
+        return res.status(501).send({success: false, message: "There was an error with the request"})
     }
 }
 
@@ -26,7 +26,7 @@ exports.getAllSwQuestions = async (req,res) => {
         let questions = await Question.find({region: "South West"});
         return res.status(200).send({success: true, message: "All South West Questions", data: questions});
     } catch (error) {
-        return res.status(500).send({success: false, message: "There was an error with the request"});
+        return res.status(501).send({success: false, message: "There was an error with the request"});
     }
 }
 
@@ -41,6 +41,6 @@ exports.addQuestion = async (req,res) => {
         await Question.create(req.body);
         return res.status(200).send({success: true, message: "Question added successfully"});
     } catch (error) {
-        res.status(500).send({success: false, message: "There was an error with the request"})
+        res.status(501).send({success: false, message: "There was an error with the request"})
     }
 }

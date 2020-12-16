@@ -7,7 +7,7 @@ exports.getAllDangerZones = async (req, res) => {
         let zones = await Zone.find({ current_status: "Danger" });
         res.status(200).json({ success: true, count: zones.length, message: 'All Danger Zones', data: zones })
     } catch (error) {
-        res.status(400).json({ success: false, message: "No Danger Zone Available" })
+        res.status(501).json({ success: false, message: "No Danger Zone Available" })
     }
 }
 
@@ -16,7 +16,7 @@ exports.getAllNwDangerZones = async (req, res) => {
         let zones = await Zone.find({ current_status: "Danger", region: "North West" });
         res.status(200).json({ success: true, count: zones.length, message: 'All Danger Zones In The North West', data: zones })
     } catch (error) {
-        res.status(400).json({ success: false, message: "No Danger Zone Available In The North West" })
+        res.status(501).json({ success: false, message: "No Danger Zone Available In The North West" })
     }
 }
 
@@ -25,7 +25,7 @@ exports.getAllSwDangerZones = async (req, res) => {
         let zones = await Zone.find({ current_status: "Danger", region: "South West" });
         res.status(200).json({ success: true, count: zones.length, message: 'All Danger Zones In The South West', data: zones })
     } catch (error) {
-        res.status(400).json({ success: false, message: "No Danger Zone Available In The South West" })
+        res.status(501).json({ success: false, message: "No Danger Zone Available In The South West" })
     }
 }
 
@@ -48,7 +48,7 @@ exports.addDangerZoneCount = async (req, res) => {
             }
 
             if (zone.danger_count.indexOf(user_id) >= 0) {
-                return res.send({ success: false, message: "User has already voted place as danger" });
+                return res.status(401).send({ success: false, message: "User has already voted place as danger" });
             } else {
                 zone.danger_count.push(user_id);
                 if (zone.danger_count.length > 2) {
@@ -73,7 +73,7 @@ exports.addDangerZoneCount = async (req, res) => {
 
     } catch (err) {
         console.log(err)
-        res.status(500).send({ success: false, message: "There was an error" })
+        res.status(501).send({ success: false, message: "There was an error" })
     }
 }
 
@@ -102,6 +102,6 @@ exports.addSafeCount = async (req, res) => {
         }
 
     } catch (error) {
-        return res.status(200).send({ success: false, message: "There was an error with the request" })
+        return res.status(501).send({ success: false, message: "There was an error with the request" })
     }
 }

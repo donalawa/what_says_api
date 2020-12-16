@@ -15,7 +15,7 @@ exports.getAllTips = async (req, res) => {
 exports.addTips = async(req, res) => {
     try {
         
-        let exist = await Tips.findOne({tip_text: req.body.tip_text});
+        let exist = await Tips.findOne({tip_text: req.body.tip_text, region: req.body.region});
         if(exist) {
             return res.status(200).send({success: false,message: "Tip already exist"})
         }

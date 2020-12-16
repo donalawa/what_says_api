@@ -1,4 +1,5 @@
 var unirest = require('unirest');
+require('dotenv');
 
 let lat = 4.23088689976473;
 let long = 9.19669293259536;
@@ -35,7 +36,7 @@ module.exports = (req, res, next) => {
     }
 
     
-    let api_url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=AIzaSyBiV-focHAlD37H0P29BnokRcU3PnOa1xk`;
+    let api_url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${process.env.API_KEY}`;
 
     unirest.get(api_url).headers({ 'Accept': 'application/json', 'Content-Type': 'application/json' }).send().then((response) => {
         let info = response.body.results[0].address_components.length - 2;

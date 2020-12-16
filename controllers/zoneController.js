@@ -52,7 +52,7 @@ exports.addDangerZoneCount = async (req, res) => {
                 return res.send({ success: false, message: "User has already voted place as danger" });
             } else {
                 zone.danger_count.push(user_id);
-                if (zone.danger_count.length > 5) {
+                if (zone.danger_count.length > 2) {
                     zone.current_status = "Danger";
                 }
                 await zone.save();

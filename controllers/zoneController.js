@@ -30,7 +30,7 @@ exports.getAllSwDangerZones = async (req, res) => {
 }
 
 exports.addDangerZoneCount = async (req, res) => {
-
+    try {
         let user_id = req.body.user_id;
         if (!user_id) {
             return res.send({ success: true, message: "There was an error with your request" });
@@ -43,7 +43,6 @@ exports.addDangerZoneCount = async (req, res) => {
                 await getLangAngLong(req.body.location_name).then((response) => {
                     zone.lat = response.body.results[0].geometry.location.lat;
                     zone.lng = response.body.results[0].geometry.location.lng;
-                    zone.save();
                     // console.log(response.body.results[0].geometry.location)
                 });
             }
@@ -72,6 +71,10 @@ exports.addDangerZoneCount = async (req, res) => {
             success: true
         });
 
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ success: false, message: "There was an error" })
+    }
 }
 
 exports.addSafeCount = async (req, res) => {

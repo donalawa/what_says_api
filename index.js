@@ -39,22 +39,7 @@ app.use(answerRouter);
 
 var port = process.env.PORT || 8070;
 
-mongoose.connect('mongodb://localhost:27017/safe_app3', {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-}, (err) => {
-    if (err) {
-        console.log(err)
-    } else {
-        console.log('Connected')
-    }
-});
-
-//mongodb://127.0.0.1:27017/seven_website4'
-// 'mongodb+srv://mnde:Je+5*sus@cluster0.gbv3b.gcp.mongodb.net/SevenApi?retryWrites=true&w=majority'
-
-// mongoose.connect('mongodb+srv://mnde:Je+5*sus@cluster0.gbv3b.gcp.mongodb.net/SevenApi?retryWrites=true&w=majority', {
+// mongoose.connect('mongodb://localhost:27017/safe_app3', {
 //     useUnifiedTopology: true,
 //     useNewUrlParser: true,
 //     useCreateIndex: true,
@@ -65,6 +50,21 @@ mongoose.connect('mongodb://localhost:27017/safe_app3', {
 //         console.log('Connected')
 //     }
 // });
+
+// mongodb://127.0.0.1:27017/seven_website4'
+// 'mongodb+srv://mnde:Je+5*sus@cluster0.gbv3b.gcp.mongodb.net/SevenApi?retryWrites=true&w=majority'
+
+mongoose.connect('mongodb+srv://Donacien:GyZVdc1McWPmSZ86@cluster0.nllfx.mongodb.net/whatsays?retryWrites=true&w=majority', {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+}, (err) => {
+    if (err) {
+        console.log(err)
+    } else {
+        console.log('Connected')
+    }
+});
 // by default, you need to set it to false.
 mongoose.set('useFindAndModify', true);
 app.listen(port, (err) => {

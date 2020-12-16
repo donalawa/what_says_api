@@ -2,7 +2,7 @@ const Answers = require('../models/Answers');
 
 exports.getAnswersForQuestion = async (req,res) => {
     try {
-        let questionId = req.params.quesId;
+        let questionId = req.headers.quesId;
         let answers = await Answers.find({question_id: questionId});
         return res.status(200).send({success: true, message: "All Answers For Question", answers: answers})
     } catch (error) {

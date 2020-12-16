@@ -12,8 +12,8 @@ tipsRouter.get('/tips',tipsController.getAllTips);
 
 tipsRouter.post('/tips', tipsController.addTips);
 
-tipsRouter.post('/tips/like/:tipId',tipsController.likeTip);
+tipsRouter.post('/tips/like',tipsController.likeTip);
 
-tipsRouter.post('/tips/dislike/:tipId', tipsController.dislikeTip);
+tipsRouter.post('/tips/dislike', tipsController.dislikeTip);
 
 module.exports = tipsRouter; 

@@ -30,7 +30,7 @@ exports.getAllSwDangerZones = async (req, res) => {
 }
 
 exports.addDangerZoneCount = async (req, res) => {
-    try {
+
         let user_id = req.body.user_id;
         if (!user_id) {
             return res.send({ success: true, message: "There was an error with your request" });
@@ -72,10 +72,6 @@ exports.addDangerZoneCount = async (req, res) => {
             success: true
         });
 
-    } catch (err) {
-        console.log(err)
-        res.status(500).send({ success: false, message: "There was an error" })
-    }
 }
 
 exports.addSafeCount = async (req, res) => {

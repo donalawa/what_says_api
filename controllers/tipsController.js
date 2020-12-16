@@ -14,12 +14,13 @@ exports.getAllTips = async (req, res) => {
 
 exports.addTips = async(req, res) => {
     try {
-        req.body.likes = [];
-        req.body.dislikes = [];
+        
         let exist = await Tips.findOne({tip_text: req.body.tip_text});
         if(exist) {
             return res.status(200).send({success: false,message: "Tip already exist"})
         }
+        req.body.likes = [];
+        req.body.dislikes = [];
         await Tips.create(req.body);
         return res.send({success: true, message: "Tips Created Successfully"});
     } catch (error) {

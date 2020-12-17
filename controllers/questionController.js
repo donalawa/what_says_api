@@ -3,7 +3,7 @@ const Question = require('../models/Question');
 exports.getAllQuestions = async (req,res) => {
     try {
         let questions = await Question.find({});
-        return res.status(200).send({success: true,message: "All Questions", data: questions})
+        return res.status(200).send(questions)
     } catch (error) {
         return res.status(501).send({success: false, message: "There was an error with the request"})
     }
@@ -13,7 +13,7 @@ exports.getAllQuestions = async (req,res) => {
 exports.getAllNwQuestions = async (req,res) => {
     try {
         let questions = await Question.find({region: "North West"});
-        return res.status(200).send({success: true, message: "All North West Questions", data: questions})
+        return res.status(200).send(questions)
     } catch (error) {
         return res.status(501).send({success: false, message: "There was an error with the request"})
     }
@@ -24,7 +24,7 @@ exports.getAllSwQuestions = async (req,res) => {
 
     try {
         let questions = await Question.find({region: "South West"});
-        return res.status(200).send({success: true, message: "All South West Questions", data: questions});
+        return res.status(200).send(questions);
     } catch (error) {
         return res.status(501).send({success: false, message: "There was an error with the request"});
     }

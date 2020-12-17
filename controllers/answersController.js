@@ -8,7 +8,7 @@ exports.getAnswersForQuestion = async (req,res) => {
             return res.status(401).send({success: false, message: "Please make sure you pass the question id in header"})
         }
         let answers = await Answers.find({question_id: questionId});
-        return res.status(200).send({success: true, message: "All Answers For Question", answers: answers})
+        return res.status(200).send(answers)
     } catch (error) {
         return res.status(500).send({success: false, message: "There was an error in the request"})
     }

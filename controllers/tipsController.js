@@ -4,7 +4,7 @@ exports.getAllTips = async (req, res) => {
     
     try {
         let tips =  await Tips.find({});
-        return res.status(200).send({success: true, message: "All Tips", data: tips});
+        return res.status(200).send(tips);
     } catch (error) {
         return res.status(501).send({success: false, message: "There was an error with request"});
     }
@@ -32,7 +32,7 @@ exports.getAllNwTips = async (req,res) => {
 
     try {
         let nwTips = await Tips.find({Region: "North West"});
-        return res.status(200).send({success: true, message: "North West Tips", data: nwTips})
+        return res.status(200).send(nwTips)
     } catch (error) {
         return res.status(501).send({success: false, message: "There was an error with the request"})
     }
@@ -41,8 +41,8 @@ exports.getAllNwTips = async (req,res) => {
 exports.getAllSwTips = async (req,res) => {
 
     try {
-        let nwTips = await Tips.find({region: "South West"});
-        return res.status(200).send({success: true, message: "South West Tips", data: nwTips})
+        let swTips = await Tips.find({region: "South West"});
+        return res.status(200).send(swTips)
     } catch (error) {
         return res.status(501).send({success: false, message: "There was an error with the request"})
     }

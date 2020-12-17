@@ -5,7 +5,7 @@ const getLangAngLong = require('../utils/getLatAndLong');
 exports.getAllDangerZones = async (req, res) => {
     try {
         let zones = await Zone.find({ current_status: "Danger" });
-        res.status(200).json({ success: true, count: zones.length, message: 'All Danger Zones', data: zones })
+        res.status(200).json(zones)
     } catch (error) {
         res.status(501).json({ success: false, message: "No Danger Zone Available" })
     }
@@ -14,7 +14,7 @@ exports.getAllDangerZones = async (req, res) => {
 exports.getAllNwDangerZones = async (req, res) => {
     try {
         let zones = await Zone.find({ current_status: "Danger", region: "North West" });
-        res.status(200).json({ success: true, count: zones.length, message: 'All Danger Zones In The North West', data: zones })
+        res.status(200).json(zones)
     } catch (error) {
         res.status(501).json({ success: false, message: "No Danger Zone Available In The North West" })
     }
@@ -23,7 +23,7 @@ exports.getAllNwDangerZones = async (req, res) => {
 exports.getAllSwDangerZones = async (req, res) => {
     try {
         let zones = await Zone.find({ current_status: "Danger", region: "South West" });
-        res.status(200).json({ success: true, count: zones.length, message: 'All Danger Zones In The South West', data: zones })
+        res.status(200).json(zones)
     } catch (error) {
         res.status(501).json({ success: false, message: "No Danger Zone Available In The South West" })
     }

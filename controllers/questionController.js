@@ -32,6 +32,7 @@ exports.getAllSwQuestions = async (req,res) => {
 
 
 exports.addQuestion = async (req,res) => {
+    console.log(req.body)
     try {
         const exist = await Question.findOne({question_title: req.body.question_title});
  

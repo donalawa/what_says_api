@@ -49,7 +49,8 @@ exports.getAllSwTips = async (req,res) => {
 }
 
 exports.likeTip = async (req,res) => {    
-
+    console.log('like Tip Body Bellow');
+    console.log(req.body)
     try {
     
         let user_id = req.body.user_id;
@@ -70,6 +71,8 @@ exports.likeTip = async (req,res) => {
 }
 
 exports.dislikeTip = async (req,res) => {
+    console.log('Dislike Tip Body Bellow');
+    console.log(req.body)
     try {
         let user_id = req.body.user_id;
         let tip_id = req.headers.tipid;

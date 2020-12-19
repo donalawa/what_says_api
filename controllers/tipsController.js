@@ -54,7 +54,7 @@ exports.likeTip = async (req,res) => {
     try {
     
         let user_id = req.body.user_id;
-        let tip_id = req.headers.tipid;
+        let tip_id = req.body.tipid;
 
         let tip = await Tips.findOne({_id: tip_id});
         if(tip.likes.indexOf(user_id) >= 0) {
@@ -75,7 +75,7 @@ exports.dislikeTip = async (req,res) => {
     console.log(req.body)
     try {
         let user_id = req.body.user_id;
-        let tip_id = req.headers.tipid;
+        let tip_id = req.body.tipid;
         let tip = await Tips.findOne({_id: tip_id});
         if(tip.dislikes.indexOf(user_id) >= 0) {
             return res.send({success: false, message: "User Has Already Disliked This Tip"});

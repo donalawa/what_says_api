@@ -50,7 +50,7 @@ exports.addDangerZoneCount = async (req, res) => {
 
             if (zone.danger_count.indexOf(user_id) >= 0) {
                 console.log('User Has Already Added Zone')
-                return res.status(401).send({ success: false, message: "User has already voted place as danger" });
+                return res.send({ success: false, message: "User has already voted place as danger" });
             } else {
                 zone.danger_count.push(user_id);
                 if (zone.danger_count.length > 2) {
@@ -97,7 +97,7 @@ exports.addSafeCount = async (req, res) => {
                 return res.send({ success: false, message: "User already voted place as safe" })
             } else {
                 zone.safe_count.push(user_id);
-                zone.save();
+                await zone.save();
                 return res.status(200).send({ success: true, message: "Successfully Added The Safe Count" })
 
             }

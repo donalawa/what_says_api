@@ -73,6 +73,7 @@ exports.likeTip = async (req,res) => {
             return res.status(200).send({success: true, message: "Like Added Successfuly", likes: total_like})
         }
     } catch (error) {
+        console.log(error)
         return res.status(501).send({success: false, message: "There was an error with request"});
     }
 }
@@ -101,6 +102,7 @@ exports.dislikeTip = async (req,res) => {
             return res.send({success: true, message: "Dislike Added", total: total_dislike});
         }
     } catch (error) {
+        console.log(error)
         return res.status(501).send({success: false, message: "There was an error with the request"});
     }
 }

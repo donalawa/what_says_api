@@ -64,7 +64,7 @@ exports.likeTip = async (req,res) => {
             return res.send({success: true, message: "Like Removed"})
         }else {
             if(tip.dislikes.indexOf(userid) >= 0) {
-                let index = tip.dislikes.indexOf(userid);
+                let index = tip.dislikes.indexOf(user_id);
                 tip.dislikes.splice(index,1);
             }
             tip.likes.push(user_id);

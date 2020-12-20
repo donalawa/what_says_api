@@ -25,13 +25,18 @@ let lastValid = new RegExp("North-West",'i');
 
 module.exports = (req, res, next) => {
     //LATITUDE AND LONGITUDE MUST BE PASS IN HEADERS
-    let lat = req.headers['lat'];
-    let long = req.headers['long'];
-    if(!req.headers['lat']) {
+    // let lat = req.headers['lat'];
+    // let long = req.headers['long'];
+    console.log('User Body Bellow')
+    console.log(req.body)
+    let userlat = req.body.userlat;
+    let userlong = req.body.userlong;
+
+    if(! req.body.userlat) {
         return res.status(500).send({message: "Please make sure you pass the required parameters"})
     }
 
-    if(!req.headers['long']) {
+    if(!req.body.userlong) {
         return res.status(500).send({message: "Please make sure you pass the required parameters"})
     }
 

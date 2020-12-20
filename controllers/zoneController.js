@@ -82,7 +82,7 @@ exports.addSafeCount = async (req, res) => {
     try {
         let name = req.body.location_name;
         let user_id = req.body.user_id;
-        let region = req.body.Region;
+        let region = req.body.region;
 
         let zone = await Zone.findOne({ location_name: name, Region: region });
         if (zone.safe_count.length > zone.danger_count.length) {

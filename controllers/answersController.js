@@ -35,11 +35,18 @@ exports.addAnswerForQuestion = async (req,res) => {
 
 
 exports.likeAnswer = async (req,res) => {
+    console.log('Like Answer Body Bellow');
+    console.log(req.body)
     try {
-        let answer = await Answers.findOne({_id: req.body.answer_id});
-        let user_id  = req.body.user_id;
+        let user_id = req.body.user_id;
+        let answer_id = req.body.answer_id;
+
+        let answer = await Answers.findOne({_id: answer_id});
         if(answer.like_count.indexOf(user_id) >= 0) {
-            return res.status(401).send({success: false, message: "User Has Already Liked This Answer"})
+            let index = answer.like_count.indexOf(user_id);
+            answer.like_count.splice(index,1);
+            await answer.save();
+            return res.send({success: true, message: "Like Removed"})
         }else {
             if(answer.dislike_count.indexOf(user_id) >= 0) {
                 let index = answer.dislike_count.indexOf(user_id);
@@ -50,6 +57,7 @@ exports.likeAnswer = async (req,res) => {
             return res.send({success: true, message: "Like Added"});
         }
     } catch (error) {
+        console.log(error)
         return res.status(501).send({success: false, message: "There was an error with the request"})
     }
 }
@@ -59,7 +67,10 @@ exports.dislikeAnswer = async (req,res) => {
         let answer = await Answers.findOne({_id: req.body.answer_id});
         let user_id  = req.body.user_id;
         if(answer.dislike_count.indexOf(user_id) >= 0) {
-            return res.status(401).send({success: false, message: "User Has Already Disliked This Answer"})
+            let index = answer.dislike_count.indexOf(user_id);
+            answer.dislike_count.splice(index,1);
+            await answer.save();
+            return res.send({success: true, message: "Dislike Removed"})
         }else {
             if(answer.like_count.indexOf(user_id) >= 0) {
                 let index = answer.like_count.indexOf(user_id);

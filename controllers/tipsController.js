@@ -58,7 +58,10 @@ exports.likeTip = async (req,res) => {
 
         let tip = await Tips.findOne({_id: tip_id});
         if(tip.likes.indexOf(user_id) >= 0) {
-            return res.send({success: false, message: "User Has Already Liked This Tip"})
+            let index = tip.likes.indexOf(user_id);
+            tip.likes.splice(index,1);
+            await tip.save();
+            return res.send({success: true, message: "Like Removed"})
         }else {
             tip.likes.push(user_id);
             let total_like = tip.likes.length;
@@ -78,7 +81,10 @@ exports.dislikeTip = async (req,res) => {
         let tip_id = req.body.tipid;
         let tip = await Tips.findOne({_id: tip_id});
         if(tip.dislikes.indexOf(user_id) >= 0) {
-            return res.send({success: false, message: "User Has Already Disliked This Tip"});
+            let index = tip.dislikes.indexOf(user_id);
+            tip.dislikes.splice(index,1);
+            await tip.save();
+            return res.send({success: true, message: "Dislike Removed"});
         }else {
             tip.dislikes.push(user_id);
             let total_dislike = tip.dislikes.length;

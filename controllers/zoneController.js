@@ -31,6 +31,7 @@ exports.getAllSwDangerZones = async (req, res) => {
 
 exports.addDangerZoneCount = async (req, res) => {
     try {
+        console.log('Got Here Into Danger Zone Controller')
         let user_id = req.body.user_id;
         if (!user_id) {
             return res.send({ success: true, message: "There was an error with your request" });
@@ -66,7 +67,8 @@ exports.addDangerZoneCount = async (req, res) => {
         req.body.lat = null;
         req.body.current_status = "Pending";
         await Zone.create(req.body);
-        return res.status(201).send({
+        console.log('Zone Added Successfully')
+        return res.status(200).send({
             message: 'Danger Zone Added',
             success: true
         });

@@ -63,6 +63,10 @@ exports.likeTip = async (req,res) => {
             await tip.save();
             return res.send({success: true, message: "Like Removed"})
         }else {
+            if(tip.dislikes.indexOf(userid) >= 0) {
+                let index = tip.dislikes.indexOf(userid);
+                tip.dislikes.splice(index,1);
+            }
             tip.likes.push(user_id);
             let total_like = tip.likes.length;
             await tip.save();
@@ -86,6 +90,11 @@ exports.dislikeTip = async (req,res) => {
             await tip.save();
             return res.send({success: true, message: "Dislike Removed"});
         }else {
+
+            if(tip.likes.indexOf(user_id) >= 0) {
+                let index = tip.likes.indexOf(user_id);
+                tip.likes.splice(index,1);
+            }
             tip.dislikes.push(user_id);
             let total_dislike = tip.dislikes.length;
             await tip.save();

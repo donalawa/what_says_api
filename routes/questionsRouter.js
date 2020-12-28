@@ -3,12 +3,14 @@ const questionController = require('../controllers/questionController');
 
 const questionRouter = express.Router();
 
-questionRouter.get('/questions',questionController.getAllQuestions);
+questionRouter.get('/questions', questionController.getAllQuestions);
 
-questionRouter.get('/questions/nw',questionController.getAllNwQuestions);
+// questionRouter.get('/questions/fb', questionController.getQuestionFb);
 
-questionRouter.get('/questions/sw',questionController.getAllSwQuestions);
+questionRouter.get('/questions/nw', questionController.getAllNwQuestions);
 
-questionRouter.post('/questions',questionController.addQuestion);
+questionRouter.get('/questions/sw', questionController.getAllSwQuestions);
+
+questionRouter.post('/questions', questionController.addQuestionFb);
 
 module.exports = questionRouter;

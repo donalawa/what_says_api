@@ -15,21 +15,27 @@ const dotenv = require('dotenv');
 const tipsRouter = require('./routes/tipsRouter');
 const questionRouter = require('./routes/questionsRouter');
 const zoneRouter = require('./routes/zoneRoutes');
-const answerRouter = require('./routes/answersRouter'); 
-
+const answerRouter = require('./routes/answersRouter');
+const admin = require('firebase-admin');
+var serviceAccount = require("./what-says-firebase-adminsdk-npy50-18d3ae756b.json");
 
 const app = express();
 
-app.use(express.json()); 
+app.use(express.json());
 
 
 // cors
 app.use(cors())
-//Install dotenv module
+    //Install dotenv module
 dotenv.config();
 
 
-app.use('/uploads', express.static(path.join(__dirname,'/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount)
+// });
 
 
 app.use(tipsRouter);
@@ -68,9 +74,9 @@ mongoose.connect('mongodb+srv://Donacien:GyZVdc1McWPmSZ86@cluster0.nllfx.mongodb
 // by default, you need to set it to false.
 mongoose.set('useFindAndModify', true);
 app.listen(port, (err) => {
-    if(err) {
+    if (err) {
         console.log(err)
-    }else {
+    } else {
         console.log(`Project is running on port ${port}`)
     }
 })

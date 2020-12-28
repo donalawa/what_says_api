@@ -14,8 +14,11 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "firebase-admin": "^9.4.2",
+    "moment": "^2.29.1",
     "mongoose": "^5.11.3",
-    "unirest": "^0.6.0"
+    "unirest": "^0.6.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {},
   "description": "Stay Safe"

@@ -1,8 +1,14 @@
 const Zone = require('../models/Zone');
 const getLangAngLong = require('../utils/getLatAndLong');
+const db = require('../utils/intitFirebase').db;
+const moment = require('moment');
+
+const answerDb = db.collection('answers');
+
+const { v4: uuidv4 } = require('uuid');
 
 
-exports.getAllDangerZones = async (req, res) => {
+exports.getAllDangerZones = async(req, res) => {
     try {
         let zones = await Zone.find({ current_status: "Danger" });
         res.status(200).json(zones)
@@ -11,7 +17,7 @@ exports.getAllDangerZones = async (req, res) => {
     }
 }
 
-exports.getAllNwDangerZones = async (req, res) => {
+exports.getAllNwDangerZones = async(req, res) => {
     try {
         let zones = await Zone.find({ current_status: "Danger", region: "North West" });
         res.status(200).json(zones)
@@ -20,7 +26,7 @@ exports.getAllNwDangerZones = async (req, res) => {
     }
 }
 
-exports.getAllSwDangerZones = async (req, res) => {
+exports.getAllSwDangerZones = async(req, res) => {
     try {
         let zones = await Zone.find({ current_status: "Danger", region: "South West" });
         res.status(200).json(zones)
@@ -29,7 +35,7 @@ exports.getAllSwDangerZones = async (req, res) => {
     }
 }
 
-exports.addDangerZoneCount = async (req, res) => {
+exports.addDangerZoneCount = async(req, res) => {
     try {
         console.log('Got Here Into Danger Zone Controller')
         let user_id = req.body.user_id;
@@ -40,7 +46,7 @@ exports.addDangerZoneCount = async (req, res) => {
 
         if (zone) {
             // Check if Lat And Long for zone already exist if not then add
-            if(!zone.lat && !zone.lng) {
+            if (!zone.lat && !zone.lng) {
                 await getLangAngLong(req.body.location_name).then((response) => {
                     zone.lat = response.body.results[0].geometry.location.lat;
                     zone.lng = response.body.results[0].geometry.location.lng;
@@ -80,7 +86,7 @@ exports.addDangerZoneCount = async (req, res) => {
     }
 }
 
-exports.addSafeCount = async (req, res) => {
+exports.addSafeCount = async(req, res) => {
 
     try {
         let name = req.body.location_name;

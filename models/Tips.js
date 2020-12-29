@@ -23,9 +23,9 @@ const TipsSchema = new Schema({
         type: String,
         required: true
     },
-    likes: [String], 
+    likes: [String],
     dislikes: [String],
 }, { timestamps: true });
 
 
-module.exports = mongoose.model('Tips', TipsSchema );
+module.exports = mongoose.model('Tips', TipsSchema);

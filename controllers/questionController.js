@@ -8,57 +8,6 @@ const questionSwDb = db.collection('questionsw');
 const { v4: uuidv4 } = require('uuid');
 
 console.log(uuidv4())
-let date = new Date();
-// console.log(moment().format())
-
-// console.log(date.getFul);
-
-exports.getAllQuestions = async(req, res) => {
-    try {
-        let questions = await Question.find({});
-        return res.status(200).send(questions)
-    } catch (error) {
-        return res.status(501).send({ success: false, message: "There was an error with the request" })
-    }
-
-}
-
-exports.getAllNwQuestions = async(req, res) => {
-    try {
-        let questions = await Question.find({ region: "North West" });
-        return res.status(200).send(questions)
-    } catch (error) {
-        return res.status(501).send({ success: false, message: "There was an error with the request" })
-    }
-}
-
-
-exports.getAllSwQuestions = async(req, res) => {
-
-    try {
-        let questions = await Question.find({ region: "South West" });
-        return res.status(200).send(questions);
-    } catch (error) {
-        return res.status(501).send({ success: false, message: "There was an error with the request" });
-    }
-}
-
-
-exports.addQuestion = async(req, res) => {
-    console.log('#########Request BOdy Bellow')
-    console.log(req.body)
-    try {
-        const exist = await Question.findOne({ question_title: req.body.question_title });
-
-        if (exist) {
-            return res.send({ success: true, message: "This question already exist try to search" });
-        }
-        await Question.create(req.body);
-        return res.status(200).send({ success: true, message: "Question added successfully" });
-    } catch (error) {
-        res.status(501).send({ success: false, message: "There was an error with the request" })
-    }
-}
 
 
 exports.addQuestionFb = async(req, res) => {
@@ -85,7 +34,7 @@ exports.addQuestionFb = async(req, res) => {
             await questionSwDb.doc(id).set(data)
             return res.status(200).send({ success: true, message: "Question added successfully" });
         } else {
-            res.status(400).send({ success: false, message: "Error With Data" })
+            return res.status(400).send({ success: false, message: "Error With Data" })
         }
     } catch (error) {
         console.log(error)

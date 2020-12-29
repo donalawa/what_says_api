@@ -4,16 +4,10 @@ const tipsRouter = express.Router();
 const tipsController = require('../controllers/tipsController');
 
 
-tipsRouter.get('/tips/nw',tipsController.getAllNwTips);
+tipsRouter.post('/tips', tipsController.addTipsFb);
 
-tipsRouter.get('/tips/sw',tipsController.getAllSwTips);
+tipsRouter.post('/tips/like', tipsController.likeTipFb);
 
-tipsRouter.get('/tips',tipsController.getAllTips);
+tipsRouter.post('/tips/dislike', tipsController.dislikeTipFb);
 
-tipsRouter.post('/tips', tipsController.addTips);
-
-tipsRouter.post('/tips/like',tipsController.likeTip);
-
-tipsRouter.post('/tips/dislike', tipsController.dislikeTip);
-
-module.exports = tipsRouter; 
+module.exports = tipsRouter;

@@ -1,108 +1,166 @@
 const Tips = require('../models/Tips');
+const db = require('../utils/intitFirebase').db;
+const moment = require('moment');
 
-exports.getAllTips = async (req, res) => {
-    
+const tipsNwDb = db.collection('tipsnw');
+const tipsSwDb = db.collection('tipssw');
+
+const { v4: uuidv4 } = require('uuid');
+
+
+
+exports.addTipsFb = async(req, res) => {
     try {
-        let tips =  await Tips.find({});
-        return res.status(200).send(tips);
-    } catch (error) {
-        return res.status(501).send({success: false, message: "There was an error with request"});
-    }
-
-}
-
-
-exports.addTips = async(req, res) => {
-    try {
-        
-        let exist = await Tips.findOne({tip_text: req.body.tip_text, region: req.body.region});
-        if(exist) {
-            return res.status(200).send({success: false,message: "Tip already exist"})
-        }
-        req.body.likes = [];
-        req.body.dislikes = [];
-        await Tips.create(req.body);
-        return res.send({success: true, message: "Tips Created Successfully"});
-    } catch (error) {
-        return res.status(501).send({success: false, message: "There was an error with the request"});
-    }
-}
-
-exports.getAllNwTips = async (req,res) => {
-
-    try {
-        let nwTips = await Tips.find({Region: "North West"});
-        return res.status(200).send(nwTips)
-    } catch (error) {
-        return res.status(501).send({success: false, message: "There was an error with the request"})
-    }
-}
-
-exports.getAllSwTips = async (req,res) => {
-
-    try {
-        let swTips = await Tips.find({region: "South West"});
-        return res.status(200).send(swTips)
-    } catch (error) {
-        return res.status(501).send({success: false, message: "There was an error with the request"})
-    }
-}
-
-exports.likeTip = async (req,res) => {    
-    console.log('like Tip Body Bellow');
-    console.log(req.body)
-    try {
-    
         let user_id = req.body.user_id;
-        let tip_id = req.body.tipid;
-
-        let tip = await Tips.findOne({_id: tip_id});
-        if(tip.likes.indexOf(user_id) >= 0) {
-            let index = tip.likes.indexOf(user_id);
-            tip.likes.splice(index,1);
-            await tip.save();
-            return res.send({success: true, message: "Like Removed"})
-        }else {
-            if(tip.dislikes.indexOf(user_id) >= 0) {
-                let index = tip.dislikes.indexOf(user_id);
-                tip.dislikes.splice(index,1);
-            }
-            tip.likes.push(user_id);
-            let total_like = tip.likes.length;
-            await tip.save();
-            return res.status(200).send({success: true, message: "Like Added Successfuly", likes: total_like})
+        let region = req.body.region;
+        let tip_text = req.body.tip_text;
+        let likes = [];
+        let dislikes = [];
+        let date = moment().format();
+        let id = uuidv4();
+        let tip = { _id: id, user_id: user_id, region: region, tip_text: tip_text, likes: likes, dislikes: dislikes, CreatedAt: date };
+        if (region == "North West") {
+            await tipsNwDb.doc(id).set(tip);
+            return res.send({ success: true, message: "Tips Created Successfully" });
+        } else if (region == "South West") {
+            await tipsSwDb.doc(id).set(tip)
+            return res.send({ success: true, message: "Tips Created Successfully" });
+        } else {
+            return res.status(400).send({ success: false, message: "Error With Data" })
         }
     } catch (error) {
         console.log(error)
-        return res.status(501).send({success: false, message: "There was an error with request"});
+        res.status(501).send({ success: false, message: "There was an error with the request" })
     }
 }
 
-exports.dislikeTip = async (req,res) => {
-    console.log('Dislike Tip Body Bellow');
+exports.likeTipFb = async(req, res) => {
+    try {
+        let user_id = req.body.user_id;
+        let tip_id = req.body.tipid;
+        let tip_region = req.body.region;
+        let allLikes = [];
+        let allDislike = [];
+
+        if (tip_region == "North West") {
+            let tip = await tipsNwDb.doc(tip_id).get();
+            // console.log(tip.data())
+            allLikes = tip.data().likes;
+            allDislike = tip.data().dislikes;
+            if (allLikes.indexOf(user_id) >= 0) {
+                console.log("USER ALREADY LIKED")
+                let index = allLikes.indexOf(user_id);
+                allLikes.splice(index, 1);
+                await tipsNwDb.doc(tip_id).update({ likes: allLikes })
+                console.log("LIked removed")
+                return res.send({ success: true, message: "Like Removed" })
+            } else {
+                if (allDislike.indexOf(user_id) >= 0) {
+
+                    console.log("Remove User Dislike")
+                    let index = allDislike.indexOf(user_id);
+                    allDislike.splice(index, 1);
+                }
+
+                allLikes.push(user_id);
+                tipsNwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
+                return res.status(200).send({ success: true, message: "Like Added Successfuly" })
+            }
+        } else if (tip_region == "South West") {
+            console.log('South West Tip')
+            let tip = await tipsSwDb.doc(tip_id).get();
+            // console.log(tip.data())
+            allLikes = tip.data().likes;
+            allDislike = tip.data().dislikes;
+            if (allLikes.indexOf(user_id) >= 0) {
+                console.log("USER ALREADY LIKED")
+                let index = allLikes.indexOf(user_id);
+                allLikes.splice(index, 1);
+                await tipsSwDb.doc(tip_id).update({ likes: allLikes })
+                console.log("LIked removed")
+                return res.send({ success: true, message: "Like Removed" })
+            } else {
+                if (allDislike.indexOf(user_id) >= 0) {
+
+                    console.log("Remove User Dislike")
+                    let index = allDislike.indexOf(user_id);
+                    allDislike.splice(index, 1);
+                }
+
+                allLikes.push(user_id);
+                tipsSwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
+                return res.status(200).send({ success: true, message: "Like Added Successfuly" })
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(501).send({ success: false, message: "There was an error with request" });
+    }
+}
+
+
+exports.dislikeTipFb = async(req, res) => {
     console.log(req.body)
     try {
         let user_id = req.body.user_id;
         let tip_id = req.body.tipid;
-        let tip = await Tips.findOne({_id: tip_id});
-        if(tip.dislikes.indexOf(user_id) >= 0) {
-            let index = tip.dislikes.indexOf(user_id);
-            tip.dislikes.splice(index,1);
-            await tip.save();
-            return res.send({success: true, message: "Dislike Removed"});
-        }else {
+        let tip_region = req.body.region;
+        let allLikes = [];
+        let allDislike = [];
 
-            if(tip.likes.indexOf(user_id) >= 0) {
-                let index = tip.likes.indexOf(user_id);
-                tip.likes.splice(index,1);
+        if (tip_region == "North West") {
+            console.log('North West Tip')
+            let tip = await tipsNwDb.doc(tip_id).get();
+            // console.log(tip.data())
+            allLikes = tip.data().likes;
+            allDislike = tip.data().dislikes;
+            if (allDislike.indexOf(user_id) >= 0) {
+                console.log("USER ALREADY LIKED")
+                let index = allDislike.indexOf(user_id);
+                allDislike.splice(index, 1);
+                await tipsNwDb.doc(tip_id).update({ dislikes: allDislike })
+                console.log("Dislike removed")
+                return res.send({ success: true, message: "Dislike Removed" })
+            } else {
+                if (allLikes.indexOf(user_id) >= 0) {
+
+                    console.log("Remove User Like")
+                    let index = allLikes.indexOf(user_id);
+                    allLikes.splice(index, 1);
+                }
+
+                allDislike.push(user_id);
+                tipsNwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
+                return res.status(200).send({ success: true, message: "Dislike Added Successfuly" })
             }
-            tip.dislikes.push(user_id);
-            let total_dislike = tip.dislikes.length;
-            await tip.save();
-            return res.send({success: true, message: "Dislike Added", total: total_dislike});
+        } else if (tip_region == "South West") {
+            console.log('North West Tip')
+            let tip = await tipsSwDb.doc(tip_id).get();
+            // console.log(tip.data())
+            allLikes = tip.data().likes;
+            allDislike = tip.data().dislikes;
+            if (allDislike.indexOf(user_id) >= 0) {
+                console.log("USER ALREADY LIKED")
+                let index = allDislike.indexOf(user_id);
+                allDislike.splice(index, 1);
+                await tipsSwDb.doc(tip_id).update({ dislikes: allDislike })
+                console.log("Dislike removed")
+                return res.send({ success: true, message: "Dislike Removed" })
+            } else {
+                if (allLikes.indexOf(user_id) >= 0) {
+
+                    console.log("Remove User Like")
+                    let index = allLikes.indexOf(user_id);
+                    allLikes.splice(index, 1);
+                }
+
+                allDislike.push(user_id);
+                tipsSwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
+                return res.status(200).send({ success: true, message: "Dislike Added Successfuly" })
+            }
         }
     } catch (error) {
         console.log(error)
-        return res.status(501).send({success: false, message: "There was an error with the request"});
+        return res.status(501).send({ success: false, message: "There was an error with request" });
     }
 }

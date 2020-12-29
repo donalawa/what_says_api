@@ -7,34 +7,27 @@ const answerDb = db.collection('answers');
 
 const { v4: uuidv4 } = require('uuid');
 
+const dangerDb = db.collection('dangerzones');
 
-exports.getAllDangerZones = async(req, res) => {
+exports.addDangerZoneCountFb = async(req, res) => {
     try {
-        let zones = await Zone.find({ current_status: "Danger" });
-        res.status(200).json(zones)
+        console.log('Got Here')
+        let user_id = req.body.user_id;
+        if (!user_id) {
+            return res.send({ success: true, message: "There was an error with your request" });
+        }
+        let zone = await dangerDb.where({ location_name: req.body.location_name }).get();
+        if (zone) {
+            console.log('No Zone')
+            console.log(zone)
+        }
+
+        console.log(zone)
+        return res.send({ message: 'Test ok' });
     } catch (error) {
-        res.status(501).json({ success: false, message: "No Danger Zone Available" })
+        console.log(error)
     }
 }
-
-exports.getAllNwDangerZones = async(req, res) => {
-    try {
-        let zones = await Zone.find({ current_status: "Danger", region: "North West" });
-        res.status(200).json(zones)
-    } catch (error) {
-        res.status(501).json({ success: false, message: "No Danger Zone Available In The North West" })
-    }
-}
-
-exports.getAllSwDangerZones = async(req, res) => {
-    try {
-        let zones = await Zone.find({ current_status: "Danger", region: "South West" });
-        res.status(200).json(zones)
-    } catch (error) {
-        res.status(501).json({ success: false, message: "No Danger Zone Available In The South West" })
-    }
-}
-
 exports.addDangerZoneCount = async(req, res) => {
     try {
         console.log('Got Here Into Danger Zone Controller')

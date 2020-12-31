@@ -44,6 +44,8 @@ module.exports = (req, res, next) => {
 
     unirest.get(api_url).headers({ 'Accept': 'application/json', 'Content-Type': 'application/json' }).send().then((response) => {
         let info = response.body.results[0].address_components.length - 2;
+        console.log('midle ware ran');
+        console.log(response.body.results[0].address_components[info].short_name)
         if(firstValid.test(response.body.results[0].address_components[info].short_name)) {
             console.log("South West")
             return next();

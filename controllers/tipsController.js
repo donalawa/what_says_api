@@ -76,7 +76,7 @@ exports.likeTipFb = async(req, res) => {
                 console.log("USER ALREADY LIKED")
                 let index = allLikes.indexOf(user_id);
                 allLikes.splice(index, 1);
-                await tipsSwDb.doc(tip_id).update({ likes: allLikes })
+                await tipsSwDb.doc(tip_id).update({ likes: allLikes });
                 console.log("LIked removed")
                 return res.send({ success: true, message: "Like Removed" })
             } else {

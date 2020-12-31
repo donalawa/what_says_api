@@ -96,7 +96,7 @@ module.exports = (req, res, next) => {
             return next();
         }
         // console.log(response.body.results[0].address_components[info]);
-        res.status(401).send({message: "You are not in the right region to make this operation"})
+        res.send({message: "You are not in the right region to make this operation"})
     }).catch(err => {
         res.send("There was an error with the request")
     })

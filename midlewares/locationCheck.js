@@ -40,7 +40,7 @@ module.exports = (req, res, next) => {
     }
 
     
-    let api_url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${process.env.API_KEY}`;
+    let api_url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${userlat},${userlong}&key=${process.env.API_KEY}`;
 
     unirest.get(api_url).headers({ 'Accept': 'application/json', 'Content-Type': 'application/json' }).send().then((response) => {
         let info = response.body.results[0].address_components.length - 2;

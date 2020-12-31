@@ -28,7 +28,6 @@ module.exports = (req, res, next) => {
     // let lat = req.headers['lat'];
     // let long = req.headers['long'];
     console.log('User Body Bellow')
-    console.log(req.body)
     let userlat = req.body.userlat;
     let userlong = req.body.userlong;
 
@@ -94,7 +93,7 @@ module.exports = (req, res, next) => {
             console.log("North West");
             return next();
         }
-        console.log(response.body.results[0].address_components[info]);
+        // console.log(response.body.results[0].address_components[info]);
         res.status(401).send({message: "You are not in the right region to make this operation"})
     }).catch(err => {
         res.send("There was an error with the request")

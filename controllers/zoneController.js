@@ -66,7 +66,7 @@ exports.addDangerZoneCountFb = async(req, res) => {
     
             }
             danger_count.push(user_id);
-            let newZone = {_id: id, user_id: user_id, region: region, location_name: location_name, lat: lat, lng: lng, current_status: current_status, danger_count: danger_count, safe_count: safe_count};
+            let newZone = {_id: id, user_id: user_id, region: region, location_name: location_name, lat: lat, lng: lng, current_status: current_status, danger_count: danger_count, safe_count: safe_count, CreatedAt: date};
             await dangerDbNw.doc(location_name).set(newZone);
             return res.send({message:"Zone Added"})
         }else if(region == "South West"){
@@ -111,8 +111,8 @@ exports.addDangerZoneCountFb = async(req, res) => {
     
             }
             danger_count.push(user_id);
-            let newZone = {_id: id, user_id: user_id, region: region, location_name: location_name, lat: lat, lng: lng, current_status: current_status, danger_count: danger_count, safe_count: safe_count};
-            await dangerDb.doc(location_name).set(newZone);
+            let newZone = {_id: id, user_id: user_id, region: region, location_name: location_name, lat: lat, lng: lng, current_status: current_status, danger_count: danger_count, safe_count: safe_count, CreatedAt: date};
+            await dangerDbSw.doc(location_name).set(newZone);
             return res.send({message:"Zone Added"})
         
         }
@@ -128,7 +128,6 @@ exports.addSafeCountFb = async(req,res) => {
         let name = req.body.location_name;
         let user_id = req.body.user_id;
         let region = req.body.region;
-        let zone = dangerDb.doc(name);
         let safe_count = [];
         if(region == "North West"){
             let zone = await dangerDbNw.doc(name).get();
@@ -149,6 +148,7 @@ exports.addSafeCountFb = async(req,res) => {
         }else if(region == "South West") {
             let zone = await dangerDbSw.doc(name).get();
             zone = zone.data();
+            console.log(zone)
             safe_count = zone.safe_count;
             if(zone.safe_count.length > zone.danger_count.length){
                 await dangerDbSw.doc(name).delete();
@@ -166,41 +166,7 @@ exports.addSafeCountFb = async(req,res) => {
 
     return res.status(400).send({status: false, message: "There was an error with request"})
     } catch (error) {
-        return res.status(501).send({ success: false, message: "There was an error with the request" })
-    }
-}
-
-
-
-
-
-
-
-exports.addSafeCount = async(req, res) => {
-
-    try {
-        let name = req.body.location_name;
-        let user_id = req.body.user_id;
-        let region = req.body.region;
-
-        let zone = await Zone.findOne({ location_name: name, Region: region });
-        if (zone.safe_count.length > zone.danger_count.length) {
-            await Zone.deleteOne({ location_name: req.body.location_name });
-            return res.status(200).send({ success: true, message: "Zone Is Now Safe" })
-        } else {
-            //Bellow we check if users id already exist in the id's for those who has voted as safe
-            if (zone.safe_count.indexOf(user_id) >= 0) {
-                return res.send({ success: false, message: "User already voted place as safe" })
-            } else {
-                zone.safe_count.push(user_id);
-                await zone.save();
-                return res.status(200).send({ success: true, message: "Successfully Added The Safe Count" })
-
-            }
-
-        }
-
-    } catch (error) {
+        console.log(error)
         return res.status(501).send({ success: false, message: "There was an error with the request" })
     }
 }

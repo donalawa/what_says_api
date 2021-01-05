@@ -63,7 +63,7 @@ exports.likeTipFb = async(req, res) => {
                 }
 
                 allLikes.push(user_id);
-                tipsNwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
+                await tipsNwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
                 return res.status(200).send({ success: true, message: "Like Added Successfuly" })
             }
         } else if (tip_region == "South West") {

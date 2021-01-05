@@ -4,6 +4,7 @@ const moment = require('moment');
 
 const tipsNwDb = db.collection('tipsnw');
 const tipsSwDb = db.collection('tipssw');
+const favDb = db.collection('favorite');
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -166,10 +167,24 @@ exports.dislikeTipFb = async(req, res) => {
 
 exports.addTipsFavFb = async(req,res) => {
     try {
-        console.log(req.body)
         let userId = req.body.userId;
         let tipId = req.body.tipId;
         let region = req.body.region;
+        let fav = await favDb.doc(userId).get();
+        let favData = fav.data();
+        for(let i = 0; i < favData.fav.length; i++) {
+            if(favData.fav[i]._id == tipId) {
+                if(favData.fav[i].favIds.indexOf(userId) >= 0) {
+                    let index = favData.fav[i].favIds.indexOf(userId);
+                    favData.fav[i].favIds.splice(index,1);
+                }else {
+                    favData.fav[i].favIds.push(userId);
+                }
+                break;
+            }
+        }
+
+        await favDb.doc(userId).update({fav: favData.fav});
 
         if(region == "North West") {
             let tip = await tipsNwDb.doc(tipId).get();

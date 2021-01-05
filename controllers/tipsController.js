@@ -167,7 +167,7 @@ exports.dislikeTipFb = async(req, res) => {
 exports.addTipsFavFb = async(req,res) => {
     try {
         let userId = req.body.userId;
-        let tipId = req.body;
+        let tipId = req.body.tipId;
         let region = req.body.region;
 
         if(region == "North West") {

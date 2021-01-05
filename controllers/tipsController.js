@@ -166,6 +166,7 @@ exports.dislikeTipFb = async(req, res) => {
 
 exports.addTipsFavFb = async(req,res) => {
     try {
+        console.log(req.body)
         let userId = req.body.userId;
         let tipId = req.body.tipId;
         let region = req.body.region;
@@ -182,6 +183,7 @@ exports.addTipsFavFb = async(req,res) => {
 
             tipFav.push(userId);
             await tipsNwDb.doc(tipId).update({favIds: tipFav});
+            console.log("Added Tip SUcc")
             return res.status(200).send({ success: true, message: "Favorite Tip Added" })
         } else if(region == "South West") {
             let tip = await tipsSwDb.doc(tipId).get();
@@ -190,11 +192,13 @@ exports.addTipsFavFb = async(req,res) => {
                 let index = tipFav.indexOf(userId);
                 tipFav.splice(index,1);
                 await tipsSwDb.doc(tipId).update({favIds: tipFav});
+                
                 return res.send({message: "Removed From Favorite"})
             }
 
             tipFav.push(userId);
             await tipsSwDb.doc(tipId).update({favIds: tipFav});
+            console.log("Added Tip SUcc")
             return res.status(200).send({ success: true, message: "Favorite Tip Added" })
         }
 

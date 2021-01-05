@@ -7,8 +7,6 @@ const tipsSwDb = db.collection('tipssw');
 
 const { v4: uuidv4 } = require('uuid');
 
-
-
 exports.addTipsFb = async(req, res) => {
     try {
         let user_id = req.body.user_id;
@@ -16,9 +14,10 @@ exports.addTipsFb = async(req, res) => {
         let tip_text = req.body.tip_text;
         let likes = [];
         let dislikes = [];
+        let favIds = [];
         let date = moment().format();
         let id = uuidv4();
-        let tip = { _id: id, user_id: user_id, region: region, tip_text: tip_text, likes: likes, dislikes: dislikes, CreatedAt: date };
+        let tip = { _id: id, user_id: user_id, region: region, tip_text: tip_text, favIds: favIds, likes: likes, dislikes: dislikes, CreatedAt: date };
         if (region == "North West") {
             await tipsNwDb.doc(id).set(tip);
             return res.send({ success: true, message: "Tips Created Successfully" });
@@ -130,7 +129,7 @@ exports.dislikeTipFb = async(req, res) => {
                 }
 
                 allDislike.push(user_id);
-                tipsNwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
+                await tipsNwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
                 return res.status(200).send({ success: true, message: "Dislike Added Successfuly" })
             }
         } else if (tip_region == "South West") {
@@ -155,10 +154,50 @@ exports.dislikeTipFb = async(req, res) => {
                 }
 
                 allDislike.push(user_id);
-                tipsSwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
+                await tipsSwDb.doc(tip_id).update({ likes: allLikes, dislikes: allDislike })
                 return res.status(200).send({ success: true, message: "Dislike Added Successfuly" })
             }
         }
+    } catch (error) {
+        console.log(error)
+        return res.status(501).send({ success: false, message: "There was an error with request" });
+    }
+}
+
+exports.addTipsFavFb = async(req,res) => {
+    try {
+        let userId = req.body.userId;
+        let tipId = req.body;
+        let region = req.body.region;
+
+        if(region == "North West") {
+            let tip = await tipsNwDb.doc(tipId).get();
+            let tipFav = tip.data().favIds;
+            if(tipFav.indexOf(userId) >= 0) {
+                let index = tipFav.indexOf(userId);
+                tipFav.splice(index,1);
+                await tipsNwDb.doc(tipId).update({favIds: tipFav});
+                return res.send({message: "Removed From Favorite"})
+            }
+
+            tipFav.push(userId);
+            await tipsNwDb.doc(tipId).update({favIds: tipFav});
+            return res.status(200).send({ success: true, message: "Favorite Tip Added" })
+        } else if(region == "South West") {
+            let tip = await tipsSwDb.doc(tipId).get();
+            let tipFav = tip.data().favIds;
+            if(tipFav.indexOf(userId) >= 0) {
+                let index = tipFav.indexOf(userId);
+                tipFav.splice(index,1);
+                await tipsSwDb.doc(tipId).update({favIds: tipFav});
+                return res.send({message: "Removed From Favorite"})
+            }
+
+            tipFav.push(userId);
+            await tipsSwDb.doc(tipId).update({favIds: tipFav});
+            return res.status(200).send({ success: true, message: "Favorite Tip Added" })
+        }
+
     } catch (error) {
         console.log(error)
         return res.status(501).send({ success: false, message: "There was an error with request" });

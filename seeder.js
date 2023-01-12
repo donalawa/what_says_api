@@ -13,6 +13,8 @@ const TIps = require('./models/Tips');
 const Zone = require('./models/Zone');
 const Tips = require('./models/Tips');
 
+
+
 // Connect to DB
 mongoose.connect('mongodb+srv://Donacien:GyZVdc1McWPmSZ86@cluster0.nllfx.mongodb.net/whatsays?retryWrites=true&w=majority', {
     useUnifiedTopology: true,
